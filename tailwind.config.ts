@@ -8,10 +8,16 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
+      colors:  {
+        primary: "#32A8E2",
+        gray: {
+            400: "#9898AD",
+            500: "#6B6B7B",
+            600: "#5B5B6B",
+            800: "#353340",
+            900: "#272532",
+        }
+    },
     },
   },
   plugins: [],
