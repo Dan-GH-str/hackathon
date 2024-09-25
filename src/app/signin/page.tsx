@@ -9,7 +9,7 @@ export default async function LoginPage() {
             Welcome to our Project!
           </h1>
           <h2 className="text-lg text-center text-slate-500 dark:text-slate-400 leading-6 truncate">
-            Sign Up To Get Started!
+            Sign In To Get Started!
           </h2>
           <LoginForm />
         </div>
