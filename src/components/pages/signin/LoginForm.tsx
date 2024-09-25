@@ -48,7 +48,7 @@ const LoginForm = () => {
                         sx: {mb: 2}
                     }}
                 />
-                <Button variant="outlined" className="text-sky bg-sky capitalize mb-1" type="submit">Войти</Button>
+                <Button variant="outlined" className="text-sky-500 dark:text-sky-400 border-sky-400 capitalize mb-1" type="submit">Войти</Button>
             </form>
             <small>Нет аккаута? <Link className="text-sky-500 dark:text-sky-400 hover:underline" href="/signup">Зарегестрироваться</Link></small>
         </>
