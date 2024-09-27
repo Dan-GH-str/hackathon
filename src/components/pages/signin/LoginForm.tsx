@@ -1,56 +1,60 @@
 'use client'
 
-import React, {FormEvent, useState} from 'react';
-import { Button } from '@mui/material';
+import React, {FormEvent, useRef} from 'react';
 import Link from 'next/link';
 import ValidatedTextField from '@/components/ValidatedTextField/ValidatedTextField';
-import { emailValidator, passwordValidator, repeatedPasswordValidator } from '@/utils/validator';
- 
- 
+import { emailValidator, passwordValidator } from '@/utils/Login-RegisterForm/validator';
+import { formFieldsNames } from '@/utils/Login-RegisterForm/formFieldsNames';
+import { getValues } from '@/utils/Login-RegisterForm/getValues';
+import { BaseButton } from '@/components/UI/SubmitButton/BaseButton';
+
 const LoginForm = () => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const { emailFieldName, passwordFieldName } = formFieldsNames
+    // Обозначим форму для использования в последующих функциях
+    const form = useRef<HTMLFormElement>(null)
  
+    // Обработка сабмита формы
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-        console.log(email, password) 
+        event.preventDefault()
+        
+        // Получение значений с формы
+        // Все данные хранятся в виде <Имя_поля>: <Значение_поля>
+        const formData = getValues(form.current!)
+
+        // Результат 
+        console.log(formData);
     }
  
     return (
         <>
-            <h2 className="text-slate-900 dark:text-slate-50 mb-3">Форма авторизации</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} ref={form}>
                 <ValidatedTextField
-                    onChange={setEmail}
                     validator={emailValidator}
                     fieldProps={{
+                        name: emailFieldName,
                         type: "email",
                         variant: 'outlined',
                         color: 'primary',
                         label: "Email",
-                        value: email,
                         fullWidth: true,
                         required: true,
-                        sx: {mb: 4},
                     }}
                 />
                 <ValidatedTextField
-                    onChange={setPassword}
                     validator={passwordValidator}
                     fieldProps={{
+                        name: passwordFieldName,
                         type: "password",
                         variant: 'outlined',
                         color: 'primary',
                         label: "Пароль",
-                        value: password,
                         required: true,
                         fullWidth: true,
-                        sx: {mb: 2}
                     }}
                 />
-                <Button variant="outlined" className="text-sky-500 dark:text-sky-400 border-sky-400 capitalize mb-1" type="submit">Войти</Button>
+                <BaseButton type="submit" variant="outlined">Войти</BaseButton>
             </form>
-            <small>Нет аккаута? <Link className="text-sky-500 dark:text-sky-400 hover:underline" href="/signup">Зарегестрироваться</Link></small>
+            <small>Нет аккаута? <Link className="text-primary hover:underline" href="/signup">Зарегестрироваться</Link></small>
         </>
     )
 }

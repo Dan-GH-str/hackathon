@@ -1,102 +1,72 @@
 'use client'
 
-import React, {FormEvent, useState} from 'react';
-import { Button, Stack } from '@mui/material';
+import React, { FormEvent, useRef } from 'react';
 import Link from 'next/link';
 import ValidatedTextField from '@/components/ValidatedTextField/ValidatedTextField';
-import { emailValidator, nameValidator, passwordValidator, repeatedPasswordValidator } from '@/utils/validator';
- 
+import { emailValidator, passwordValidator, repeatedPasswordValidator } from '@/utils/Login-RegisterForm/validator';
+import { formFieldsNames } from '@/utils/Login-RegisterForm/formFieldsNames';
+import { getValues } from '@/utils/Login-RegisterForm/getValues';
+import { BaseButton } from '@/components/UI/SubmitButton/BaseButton';
  
 const RegisterForm = () => {
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [repeatedPassword, setRepeatedPassword] = useState('')
- 
+    const { emailFieldName, passwordFieldName, repeatedPasswordFieldName } = formFieldsNames
+    // Обозначим форму для использования в последующих функциях
+    const form = useRef<HTMLFormElement>(null);
+
+    // Обработка сабмита формы
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-        console.log(firstName, lastName, email, password) 
+        event.preventDefault()
+        
+        // Получение значений с формы
+        // Все данные хранятся в виде <Имя_поля>: <Значение_поля>
+        const formData = getValues(form.current!)
+
+        // Результат 
+        console.log(formData);
     }
  
     return (
         <>
-            <h2 className="text-slate-900 dark:text-slate-50 mb-3">Форма регистрации</h2>
-            <form onSubmit={handleSubmit}>
-                <Stack spacing={2} direction="row" sx={{marginBottom: 4}}>
-                    <ValidatedTextField
-                        onChange={setFirstName}
-                        validator={nameValidator}
-                        fieldProps = {{
-                            type: "text",
-                            variant: 'outlined',
-                            color: 'primary',
-                            label: "Имя",
-                            value: firstName,
-                            fullWidth: true,
-                            required: true
-                        }}
-                    />
-                    <ValidatedTextField
-                        onChange={setLastName}
-                        validator={nameValidator}
-                        fieldProps={{
-                            type: "text",
-                            variant: 'outlined',
-                            color: 'primary',
-                            label: "Фамилия",
-                            value: lastName,
-                            fullWidth: true,
-                            required: true
-                        }}
-                    />
-                </Stack>
+            <form onSubmit={handleSubmit} ref={form}>
                 <ValidatedTextField
-                    onChange={setEmail}
                     validator={emailValidator}
                     fieldProps={{
+                        name: emailFieldName,
                         type: "email",
                         variant: 'outlined',
                         color: 'primary',
                         label: "Email",
-                        value: email,
                         fullWidth: true,
-                        required: true,
-                        sx: {mb: 4},
+                        required: true
                     }}
                 />
                 <ValidatedTextField
-                    onChange={setPassword}
                     validator={passwordValidator}
                     fieldProps={{
+                        name: passwordFieldName,
                         type: "password",
                         variant: 'outlined',
                         color: 'primary',
                         label: "Пароль",
-                        value: password,
                         required: true,
-                        fullWidth: true,
-                        sx: {mb: 4}
-
+                        fullWidth: true
                     }}
                 />
                 <ValidatedTextField
-                    onChange={setRepeatedPassword}
-                    validator={(e: string) => repeatedPasswordValidator(password, e)}
+                    validator={password => repeatedPasswordValidator(form.current![passwordFieldName].value, password)}
                     fieldProps={{
+                        name: repeatedPasswordFieldName,
                         type: "password",
                         variant: 'outlined',
                         color: 'primary',
                         label: "Повторите пароль",
-                        value: repeatedPassword,
                         required: true,
-                        fullWidth: true,
-                        sx: {mb: 2}
+                        fullWidth: true
                     }}
                 />
-                <Button variant="outlined" className="text-sky-500 dark:text-sky-400 border-sky-400 capitalize mb-1" type="submit">Зарегестрироваться</Button>
+                <BaseButton type="submit" variant="outlined">Зарегестрироваться</BaseButton>
             </form>
-            <small>Уже есть аккаунт? <Link className="text-sky-500 dark:text-sky-400 hover:underline" href="/signin">Войдите здесь</Link></small>
+            <small>Уже есть аккаунт? <Link className="text-primary hover:underline" href="/signin">Войдите здесь</Link></small>
         </>
     )
 }
